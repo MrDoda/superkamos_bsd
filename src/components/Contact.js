@@ -37,7 +37,7 @@ class Contact extends Component {
 
   componentDidMount = () => {
     axios
-      .get(`http://superkamos.cz/api/?rest_route=/wp/v2/pages/206`)
+      .get(`https://superkamos.cz/api/?rest_route=/wp/v2/pages/206`)
       .then(res => {
         if (res && res.data && res.data.acf) {
           const mainPageInfo = res.data.acf;
@@ -58,7 +58,7 @@ class Contact extends Component {
 
   sendMsgToApi = () => {
     axios
-      .post(`http://superkamos.cz/api/?rest_route=/test/test2`, {
+      .post(`https://superkamos.cz/api/?rest_route=/test/test2`, {
         msg: this.state.msg,
         email: this.state.email
       })

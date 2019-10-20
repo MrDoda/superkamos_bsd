@@ -20,26 +20,28 @@ const styles = {
 class Home extends Component {
   state = {};
   componentDidMount = () => {
-    axios.get(`http://superkamos.cz/api/?rest_route=/wp/v2/media`).then(res => {
-      const media = res.data;
-      this.setState({ media });
-    });
+    axios
+      .get(`https://superkamos.cz/api/?rest_route=/wp/v2/media`)
+      .then(res => {
+        const media = res.data;
+        this.setState({ media });
+      });
 
     axios
-      .get(`http://superkamos.cz/api/?rest_route=/wp/v2/friends`)
+      .get(`https://superkamos.cz/api/?rest_route=/wp/v2/friends`)
       .then(res => {
         const friendsData = res.data;
         this.setState({ friendsData });
       });
     axios
-      .get(`http://superkamos.cz/api/?rest_route=/wp/v2/partners`)
+      .get(`https://superkamos.cz/api/?rest_route=/wp/v2/partners`)
       .then(res => {
         const partnersData = res.data;
         this.setState({ partnersData });
       });
 
     axios
-      .get(`http://superkamos.cz/api/?rest_route=/wp/v2/pages/206`)
+      .get(`https://superkamos.cz/api/?rest_route=/wp/v2/pages/206`)
       .then(res => {
         if (res && res.data && res.data.acf) {
           const mainPageInfo = res.data.acf;

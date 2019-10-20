@@ -56,7 +56,7 @@ class Friends extends Component {
 
   sendMsgToApi = () => {
     axios
-      .post(`http://superkamos.cz/api/?rest_route=/test/test2`, {
+      .post(`https://superkamos.cz/api/?rest_route=/test/test2`, {
         msg: this.state.msg,
         email: this.state.email
       })

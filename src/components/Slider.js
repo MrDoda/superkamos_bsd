@@ -88,7 +88,7 @@ class SimpleSlider extends React.Component {
 
   componentDidMount = () => {
     axios
-      .get(`http://superkamos.cz/api/?rest_route=/wp/v2/sliders`)
+      .get(`https://superkamos.cz/api/?rest_route=/wp/v2/sliders`)
       .then(res => {
         const sliderData = res.data;
         this.setState({ sliderData: this.createSliderData(res.data) });

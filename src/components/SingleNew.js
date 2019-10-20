@@ -40,7 +40,7 @@ class Contact extends Component {
     const { match } = this.props;
     axios
       .get(
-        `http://superkamos.cz/api/?rest_route=/wp/v2/posts/${match.params.id}`
+        `https://superkamos.cz/api/?rest_route=/wp/v2/posts/${match.params.id}`
       )
       .then(res => {
         const post = res.data;
@@ -48,7 +48,7 @@ class Contact extends Component {
       });
 
     axios
-      .get(`http://superkamos.cz/api/?rest_route=/wp/v2/pages/206`)
+      .get(`https://superkamos.cz/api/?rest_route=/wp/v2/pages/206`)
       .then(res => {
         if (res && res.data && res.data.acf) {
           const mainPageInfo = res.data.acf;
@@ -68,7 +68,7 @@ class Contact extends Component {
     const { match } = this.props;
     axios
       .get(
-        `http://superkamos.cz/api/?rest_route=/wp/v2/posts/${match.params.id}`
+        `https://superkamos.cz/api/?rest_route=/wp/v2/posts/${match.params.id}`
       )
       .then(res => {
         const post = res.data;

@@ -22,10 +22,12 @@ class FooterFriends extends Component {
   };
 
   componentDidMount() {
-    axios.get(`http://superkamos.cz/api/?rest_route=/wp/v2/posts`).then(res => {
-      const news = res.data;
-      this.setState({ news });
-    });
+    axios
+      .get(`https://superkamos.cz/api/?rest_route=/wp/v2/posts`)
+      .then(res => {
+        const news = res.data;
+        this.setState({ news });
+      });
   }
 
   render() {
