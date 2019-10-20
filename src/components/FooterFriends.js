@@ -13,7 +13,6 @@ import { withRouter } from "react-router";
 import { SocialIcon } from "react-social-icons";
 import dateformat from "dateformat";
 import axios from "axios";
-import { getImg } from "./Friends";
 
 const styles = theme => ({});
 
@@ -25,13 +24,12 @@ class FooterFriends extends Component {
   componentDidMount() {
     axios.get(`http://superkamos.cz/api/?rest_route=/wp/v2/posts`).then(res => {
       const news = res.data;
-      console.log(news);
       this.setState({ news });
     });
   }
 
   render() {
-    const { classes, history, media } = this.props;
+    const { classes, history, mainPageInfo } = this.props;
     const { news } = this.state;
     return (
       <React.Fragment>
@@ -89,11 +87,15 @@ class FooterFriends extends Component {
                         <ListItem
                           key={item.id}
                           className={"newsBottom"}
-                          onClick={() =>
-                            history.push("novinka/" + item.id + "#header")
-                          }
+                          onClick={() => history.push("/novinka/" + item.id)}
                         >
-                          <Avatar src={getImg(item.featured_media, media)} />
+                          <Avatar
+                            src={
+                              item.better_featured_image
+                                ? item.better_featured_image.source_url
+                                : "/img/default.jpg"
+                            }
+                          />
                           <ListItemText
                             primary={
                               <span
@@ -133,27 +135,14 @@ class FooterFriends extends Component {
                     marginBottom: "20px"
                   }}
                 >
-                  <strong>Mgr. Cesneková Zuzana</strong>, Předsedkyně spolku,
-                  fundraising,
-                  <br />
-                  <a href="mailto:cesnekova@barevnysvetdeti.cz">
-                    cesnekova@barevnysvetdeti.cz
-                  </a>
-                  , <a href="tel:732857225">731 850 775</a>
-                  <br />
-                  <br />
-                  <strong>Bc. Bradáčová Veronika</strong>, Sociální pracovník
-                  projektu,
-                  <br />
-                  <a href="mailto:bradacova@barevnysvetdeti.cz">
-                    bradacova@barevnysvetdeti.cz
-                  </a>
-                  , <a href="tel:725945135">725 945 135</a>
-                  <br />
-                  <br />
-                  <a href="https://www.barevnysvetdeti.cz/">
-                    www.barevnysvetdeti.cz
-                  </a>
+                  {mainPageInfo && (
+                    <div
+                      className="no-p-padding"
+                      dangerouslySetInnerHTML={{
+                        __html: mainPageInfo.contact
+                      }}
+                    />
+                  )}
                 </Typography>
               </div>
             </Grid>

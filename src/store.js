@@ -24,9 +24,9 @@ export const getSliderData = () => {
 export const getMenuData = () => {
   let data = [
     {
-      url: "https://www.barevnysvetdeti.cz/",
+      url: "https://www.barevnysvetdeti.cz/pro-rodiny/",
       external: "true",
-      text: "Barevný svět dětí"
+      text: "Projekt kámoš"
     },
     {
       url: "/#superkamos",

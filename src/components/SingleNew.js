@@ -6,7 +6,6 @@ import axios from "axios";
 import Paper from "@material-ui/core/Paper";
 import ScrollButton from "./ScrollButton";
 import FooterFriends from "./FooterFriends";
-import { getImg } from "./Friends";
 import Grid from "@material-ui/core/Grid";
 
 const styles = theme => ({
@@ -37,13 +36,8 @@ const styles = theme => ({
 class Contact extends Component {
   state = {};
 
-  componentDidMount = () => {
+  componentDidMount() {
     const { match } = this.props;
-
-    axios.get(`http://superkamos.cz/api/?rest_route=/wp/v2/media`).then(res => {
-      const media = res.data;
-      this.setState({ media });
-    });
     axios
       .get(
         `http://superkamos.cz/api/?rest_route=/wp/v2/posts/${match.params.id}`
@@ -52,9 +46,18 @@ class Contact extends Component {
         const post = res.data;
         this.setState({ post });
       });
-  };
 
-  componentDidUpdate() {
+    axios
+      .get(`http://superkamos.cz/api/?rest_route=/wp/v2/pages/206`)
+      .then(res => {
+        if (res && res.data && res.data.acf) {
+          const mainPageInfo = res.data.acf;
+          this.setState({ mainPageInfo });
+        }
+      });
+  }
+
+  componentDidUpdate(prevProps) {
     let hash = this.props.location.hash.replace("#", "");
     if (hash) {
       let node = ReactDOM.findDOMNode(this.refs[hash]);
@@ -62,24 +65,16 @@ class Contact extends Component {
         node.scrollIntoView();
       }
     }
-  }
-
-  sendMsgToApi = () => {
+    const { match } = this.props;
     axios
-      .post(`http://superkamos.cz/api/?rest_route=/test/test2`, {
-        msg: this.state.msg,
-        email: this.state.email
-      })
+      .get(
+        `http://superkamos.cz/api/?rest_route=/wp/v2/posts/${match.params.id}`
+      )
       .then(res => {
-        console.log(res);
+        const post = res.data;
+        this.setState({ post });
       });
-  };
-
-  handleChange = name => event => {
-    this.setState({
-      [name]: event.target.value
-    });
-  };
+  }
 
   render() {
     const { classes, rootClass } = this.props;
@@ -99,7 +94,11 @@ class Contact extends Component {
               <Grid item sm={4} xs={12}>
                 <img
                   className="imgUrlKamosi"
-                  src={getImg(post.featured_media, media)}
+                  src={
+                    post.better_featured_image
+                      ? post.better_featured_image.source_url
+                      : "/img/default.jpg"
+                  }
                 />
               </Grid>
               <Grid item sm={8} xs={12}>
@@ -115,7 +114,10 @@ class Contact extends Component {
             </Grid>
           </Paper>
         </div>
-        <FooterFriends rootClass={classes.root} media={media} />
+        <FooterFriends
+          rootClass={classes.root}
+          mainPageInfo={this.state.mainPageInfo}
+        />
         <ScrollButton scrollStepInPx="50" delayInMs="16.66" />
       </React.Fragment>
     );

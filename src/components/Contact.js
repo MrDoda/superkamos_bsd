@@ -9,6 +9,7 @@ import Paper from "@material-ui/core/Paper";
 import GoogleMapReact from "google-map-react";
 import ScrollButton from "./ScrollButton";
 import FooterFriends from "./FooterFriends";
+import DirectionSnackbar from "./MessageSent";
 
 const styles = theme => ({
   mainContact: {
@@ -35,10 +36,14 @@ class Contact extends Component {
   state = {};
 
   componentDidMount = () => {
-    axios.get(`http://superkamos.cz/api/?rest_route=/wp/v2/media`).then(res => {
-      const media = res.data;
-      this.setState({ media });
-    });
+    axios
+      .get(`http://superkamos.cz/api/?rest_route=/wp/v2/pages/206`)
+      .then(res => {
+        if (res && res.data && res.data.acf) {
+          const mainPageInfo = res.data.acf;
+          this.setState({ mainPageInfo });
+        }
+      });
   };
 
   componentDidUpdate() {
@@ -58,8 +63,12 @@ class Contact extends Component {
         email: this.state.email
       })
       .then(res => {
-        console.log(res);
+        this.setState({ open: true, msg: "", email: "" });
       });
+  };
+
+  handleClose = () => {
+    this.setState({ open: false });
   };
 
   handleChange = name => event => {
@@ -70,7 +79,7 @@ class Contact extends Component {
 
   render() {
     const { classes, rootClass } = this.props;
-    const { media } = this.state;
+    const { mainPageInfo } = this.state;
     return (
       <React.Fragment>
         <div className={rootClass + " containerWidth"}>
@@ -79,26 +88,14 @@ class Contact extends Component {
               <img className={"logo_bsd"} src={"/img/logo.png"} />
             </Typography>
             <Typography>
-              <strong>Bc. Dušková Martina</strong>, Koordinátor projektu,
-              <br />
-              <a href="mailto:kamos@barevnysvetdeti.cz">
-                kamos@barevnysvetdeti.cz{" "}
-              </a>
-              , <a href="tel:732857225">732 857 225</a>
-              <br />
-              <br />
-              <strong>Bc. Bradáčová Veronika</strong>, Sociální pracovník
-              projektu,
-              <br />
-              <a href="mailto:bradacova@barevnysvetdeti.cz">
-                bradacova@barevnysvetdeti.cz
-              </a>
-              , <a href="tel:725945135">725 945 135</a>
-              <br />
-              <br />
-              <a href="https://www.barevnysvetdeti.cz/">
-                www.barevnysvetdeti.cz
-              </a>
+              {mainPageInfo && (
+                <div
+                  className="no-p-padding"
+                  dangerouslySetInnerHTML={{
+                    __html: mainPageInfo.contact
+                  }}
+                />
+              )}
             </Typography>
             <Typography>
               <br />
@@ -119,7 +116,7 @@ class Contact extends Component {
               defaultCenter={{ lat: 50.068777, lng: 14.435769 }}
               defaultZoom={17}
             >
-              <AnyReactComponent
+              <MapReactComponent
                 lat={50.068777}
                 lng={14.435769}
                 text={"Barevný svět dětí"}
@@ -162,14 +159,18 @@ class Contact extends Component {
             <div style={{ clear: "both" }} />
           </Paper>
         </div>
-        <FooterFriends rootClass={classes.root} media={media} />
+        <FooterFriends rootClass={classes.root} mainPageInfo={mainPageInfo} />
         <ScrollButton scrollStepInPx="50" delayInMs="16.66" />
+        <DirectionSnackbar
+          handleClose={this.handleClose}
+          open={this.state.open}
+        />
       </React.Fragment>
     );
   }
 }
 
-const AnyReactComponent = ({ text }) => (
+const MapReactComponent = ({ text }) => (
   <div
     style={{
       background: "white",

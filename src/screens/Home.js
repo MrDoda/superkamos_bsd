@@ -7,6 +7,7 @@ import Partners from "../components/Partners";
 import FooterFriends from "../components/FooterFriends";
 import ScrollButton from "../components/ScrollButton";
 import axios from "axios";
+import DirectionSnackbar from "../components/MessageSent";
 
 const styles = {
   root: {
@@ -36,14 +37,23 @@ class Home extends Component {
         const partnersData = res.data;
         this.setState({ partnersData });
       });
+
+    axios
+      .get(`http://superkamos.cz/api/?rest_route=/wp/v2/pages/206`)
+      .then(res => {
+        if (res && res.data && res.data.acf) {
+          const mainPageInfo = res.data.acf;
+          this.setState({ mainPageInfo });
+        }
+      });
   };
   render() {
     const { classes } = this.props;
-    const { friendsData, media, partnersData } = this.state;
+    const { friendsData, media, partnersData, mainPageInfo } = this.state;
     return (
       <div>
         <SimpleSlider />
-        <AboutFriends rootClass={classes.root} />
+        <AboutFriends rootClass={classes.root} mainPageInfo={mainPageInfo} />
         <Friends
           rootClass={classes.root}
           friendsData={friendsData}
@@ -54,7 +64,7 @@ class Home extends Component {
           partnersData={partnersData}
           media={media}
         />
-        <FooterFriends rootClass={classes.root} media={media} />
+        <FooterFriends rootClass={classes.root} mainPageInfo={mainPageInfo} />
         <ScrollButton scrollStepInPx="50" delayInMs="16.66" />
       </div>
     );

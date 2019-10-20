@@ -8,6 +8,7 @@
     "@material-ui/icons": "^3.0.1",
     "axios": "^0.18.0",
     "bulma": "^0.7.2",
+    "clsx": "^1.0.4",
     "dateformat": "^3.0.3",
     "faker": "^4.1.0",
     "google-map-react": "^1.1.2",

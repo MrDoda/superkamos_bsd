@@ -13,6 +13,7 @@ import { withRouter } from "react-router";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
+import DirectionSnackbar from "./MessageSent";
 
 const styles = theme => ({
   root: {
@@ -60,8 +61,12 @@ class Friends extends Component {
         email: this.state.email
       })
       .then(res => {
-        console.log(res);
+        this.setState({ open: true, msg: "", email: "" });
       });
+  };
+
+  handleClose = () => {
+    this.setState({ open: false });
   };
 
   handleChange = name => event => {
@@ -71,7 +76,7 @@ class Friends extends Component {
   };
 
   render() {
-    const { classes, rootClass } = this.props;
+    const { classes, rootClass, mainPageInfo } = this.props;
     return (
       <div ref="superkamos" className={rootClass + " containerWidth"}>
         <Grid spacing={24} className={classes.gridList} cols={3}>
@@ -88,72 +93,98 @@ class Friends extends Component {
           <ExpansionPanel className="marginTop10">
             <ExpansionPanelSummary expandIcon={<Icon>expand_more</Icon>}>
               <Typography variant="h6" className={classes.heading}>
-                Co znamená stát se
-                <span
-                  style={{ fontWeight: 800, marginLeft: 10, color: "#F39C12" }}
-                >
-                  Superkámošem
-                </span>
-                <span
-                  style={{
-                    color: "#F39C12"
-                  }}
-                >
-                  ?
-                </span>
+                {mainPageInfo && (
+                  <div
+                    className="no-p-padding"
+                    dangerouslySetInnerHTML={{
+                      __html: mainPageInfo.gfaq1_heading
+                    }}
+                  />
+                )}
               </Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <Typography className="expandedText">
-                Stát se SUPERkámošem znamená <strong>finančně podpořit</strong>{" "}
-                asistenta a dítě zapojené v projektu Kámoš. Potřebná částka na{" "}
-                <strong>fungování konkrétní dvojice</strong> po dobu jednoho
-                roku je 42 000 Kč.
+                {mainPageInfo && (
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: mainPageInfo.gfaq1_text
+                    }}
+                  />
+                )}
               </Typography>
             </ExpansionPanelDetails>
           </ExpansionPanel>
           <ExpansionPanel className="marginTop10">
             <ExpansionPanelSummary expandIcon={<Icon>expand_more</Icon>}>
               <Typography variant="h6" className="expandedText">
-                Co se za projektem Kámoš skrývá
-                <span>?</span>
+                {mainPageInfo && (
+                  <div
+                    className="no-p-padding"
+                    dangerouslySetInnerHTML={{
+                      __html: mainPageInfo.gfaq2_heading
+                    }}
+                  />
+                )}
               </Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <Typography className="expandedText">
-                Projekt Kámoš pomáhá ohroženým dětem a jejich rodinám již{" "}
-                <strong>od roku 2005</strong>.<br />
-                Děti = malí Kámoši se v rámci projektu pravidelně setkávají s
-                osobními asistenty,
-                <br />
-                velkými Kámoši.
-                <br />
-                <br />
-                <strong>
-                  Úlohou asistenta je být malému Kámoši oporou, vzorem,
-                  zpovědníkem, motivací a hlavně kamarádem, na kterého se může
-                  spolehnout.{" "}
-                </strong>
-                <br />
-                <br />
-                Zároveň dospělí členové rodiny mají možnost využít služeb
-                sociálního pracovníka, psychologa, terapeuta, právníka,
-                finančního poradce, mediátora či služby kariérního poradce.
+                {mainPageInfo && (
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: mainPageInfo.gfaq2_text
+                    }}
+                  />
+                )}
               </Typography>
             </ExpansionPanelDetails>
           </ExpansionPanel>
           <ExpansionPanel className="marginTop10">
             <ExpansionPanelSummary expandIcon={<Icon>expand_more</Icon>}>
               <Typography variant="h6" className={classes.heading}>
-                Komu můj příspěvek pomůže a jak
-                <span>?</span>
+                {mainPageInfo && (
+                  <div
+                    className="no-p-padding"
+                    dangerouslySetInnerHTML={{
+                      __html: mainPageInfo.gfaq3_heading
+                    }}
+                  />
+                )}
+              </Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              {mainPageInfo && (
+                <div
+                  dangerouslySetInnerHTML={{ __html: mainPageInfo.gfaq3_text }}
+                />
+              )}
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+
+          <ExpansionPanel className="marginTop10">
+            <ExpansionPanelSummary expandIcon={<Icon>expand_more</Icon>}>
+              <Typography variant="h6" className={classes.heading}>
+                {mainPageInfo && (
+                  <div
+                    className="no-p-padding"
+                    dangerouslySetInnerHTML={{
+                      __html: mainPageInfo.gfaq4_heading
+                    }}
+                  />
+                )}
               </Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <Typography className="expandedText">
-                Váš příspěvek v první řadě
-                <strong>podpoří práci osobního asistenta s dítětem.</strong>
-                <br />A dle potřeby nám také umožní pracovat s celou rodinou.
+                {mainPageInfo && (
+                  <div
+                    className="no-p-padding"
+                    dangerouslySetInnerHTML={{
+                      __html: mainPageInfo.gfaq4_text
+                    }}
+                  />
+                )}
               </Typography>
             </ExpansionPanelDetails>
           </ExpansionPanel>
@@ -161,32 +192,25 @@ class Friends extends Component {
           <ExpansionPanel className="marginTop10">
             <ExpansionPanelSummary expandIcon={<Icon>expand_more</Icon>}>
               <Typography variant="h6" className={classes.heading}>
-                Jak bude vše probíhat
-                <span>?</span>
-              </Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
-              <Typography className="expandedText" />
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
-
-          <ExpansionPanel className="marginTop10">
-            <ExpansionPanelSummary expandIcon={<Icon>expand_more</Icon>}>
-              <Typography variant="h6" className={classes.heading}>
-                Co za to dostanu ?
+                {mainPageInfo && (
+                  <div
+                    className="no-p-padding"
+                    dangerouslySetInnerHTML={{
+                      __html: mainPageInfo.gfaq5_heading
+                    }}
+                  />
+                )}
               </Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <Typography className="expandedText">
-                <span style={{ fontWeight: 800 }}>Superkámoš</span> pravidelně
-                2x za rok (v lednu a v červnu) obdrží zprávu o činosti kámošské
-                dvojice. Ostatní sponzoři dostanou zprávu na konci školního
-                roku. <br />
-                <br />
-                <strong>
-                  Každý kdo přispěje bude mít uvedeno na webu logo
-                </strong>{" "}
-                či jméno a motto, které vás vedlo k podpoření kámošské dvojice.
+                {mainPageInfo && (
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: mainPageInfo.gfaq5_text
+                    }}
+                  />
+                )}
               </Typography>
             </ExpansionPanelDetails>
           </ExpansionPanel>
@@ -207,22 +231,14 @@ class Friends extends Component {
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <Typography style={{ color: "#fff" }} className="expandedText">
-                <strong>Mgr. Cesneková Zuzana</strong>, Předsedkyně spolku,
-                fundraising,
-                <br />
-                <a href="mailto:cesnekova@barevnysvetdeti.cz">
-                  cesnekova@barevnysvetdeti.cz
-                </a>
-                , <a href="tel:732857225">731 850 775</a>
-                <br />
-                <br />
-                <strong>Bc. Bradáčová Veronika</strong>, Sociální pracovník
-                projektu,
-                <br />
-                <a href="mailto:bradacova@barevnysvetdeti.cz">
-                  bradacova@barevnysvetdeti.cz
-                </a>
-                , <a href="tel:725945135">725 945 135</a>
+                {mainPageInfo && (
+                  <div
+                    className="no-p-padding"
+                    dangerouslySetInnerHTML={{
+                      __html: mainPageInfo.contact
+                    }}
+                  />
+                )}
               </Typography>
             </ExpansionPanelDetails>
           </ExpansionPanel>
@@ -279,6 +295,10 @@ class Friends extends Component {
             </ExpansionPanelDetails>
           </ExpansionPanel>
         </Grid>
+        <DirectionSnackbar
+          handleClose={this.handleClose}
+          open={this.state.open}
+        />
       </div>
     );
   }

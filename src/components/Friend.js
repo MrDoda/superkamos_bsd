@@ -8,8 +8,7 @@ import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import ScrollButton from "./ScrollButton";
 import FooterFriends from "./FooterFriends";
-import { getImg } from "./Friends";
-import Grid from "@material-ui/core/Grid";
+import DirectionSnackbar from "./MessageSent";
 
 const styles = theme => ({
   mainContact: {
@@ -27,8 +26,7 @@ const styles = theme => ({
     marginTop: "30px"
   },
   button: {
-    float: "right",
-    backgroundColor: "#d7fae8"
+    float: "right"
   },
   contentHeader: {
     padding: "24px",
@@ -54,6 +52,14 @@ class Contact extends Component {
         const post = res.data;
         this.setState({ post });
       });
+    axios
+      .get(`http://superkamos.cz/api/?rest_route=/wp/v2/pages/206`)
+      .then(res => {
+        if (res && res.data && res.data.acf) {
+          const mainPageInfo = res.data.acf;
+          this.setState({ mainPageInfo });
+        }
+      });
   };
 
   componentDidUpdate() {
@@ -73,8 +79,12 @@ class Contact extends Component {
         email: this.state.email
       })
       .then(res => {
-        console.log(res);
+        this.setState({ open: true, msg: "", email: "" });
       });
+  };
+
+  handleClose = () => {
+    this.setState({ open: false });
   };
 
   handleChange = name => event => {
@@ -85,10 +95,11 @@ class Contact extends Component {
 
   render() {
     const { classes, rootClass } = this.props;
-    const { media, post } = this.state;
+    const { post } = this.state;
     if (!post || !post.content) {
       return "";
     }
+
     return (
       <React.Fragment>
         <div ref={"header"} style={{ position: "absolute", top: 0 }} />
@@ -133,6 +144,7 @@ class Contact extends Component {
                 className={classes.button}
                 onClick={() => this.sendMsgToApi()}
                 variant="contained"
+                color="secondary"
               >
                 Odeslat
               </Button>
@@ -140,8 +152,15 @@ class Contact extends Component {
             <div style={{ clear: "both" }} />
           </Paper>
         </div>
-        <FooterFriends rootClass={classes.root} media={media} />
+        <FooterFriends
+          rootClass={classes.root}
+          mainPageInfo={this.state.mainPageInfo}
+        />
         <ScrollButton scrollStepInPx="50" delayInMs="16.66" />
+        <DirectionSnackbar
+          handleClose={this.handleClose}
+          open={this.state.open}
+        />
       </React.Fragment>
     );
   }

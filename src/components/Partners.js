@@ -8,7 +8,6 @@ import {
   Tooltip
 } from "@material-ui/core";
 import { withRouter } from "react-router";
-import { getImg } from "./Friends";
 
 const styles = theme => ({
   root: {
@@ -86,7 +85,11 @@ class Partners extends Component {
                       >
                         <img
                           className="imgUrlPartneri"
-                          src={getImg(partner.featured_media, media)}
+                          src={
+                            partner.better_featured_image
+                              ? partner.better_featured_image.source_url
+                              : "/img/default.jpg"
+                          }
                         />
                       </div>
                     </Tooltip>

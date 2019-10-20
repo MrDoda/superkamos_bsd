@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import { Button, withStyles, Grid, Typography, Paper } from "@material-ui/core";
 import { withRouter } from "react-router";
+import axios from "axios";
 
 const styles = theme => ({
   root: {
@@ -48,10 +49,8 @@ class Friends extends Component {
   }
 
   render() {
-    const { classes, rootClass, history, media } = this.props;
-    let { friendsData } = this.props;
+    const { rootClass, history, friendsData } = this.props;
     const { width } = this.state;
-
     return (
       <div ref="kamosi" className={rootClass + " containerWidth"}>
         <Typography
@@ -92,7 +91,11 @@ class Friends extends Component {
                       className={
                         "imgUrlKamosi " + getFriendColor(friend.acf.super_kamos)
                       }
-                      src={getImg(friend.featured_media, media)}
+                      src={
+                        friend.better_featured_image
+                          ? friend.better_featured_image.source_url
+                          : "/img/default.jpg"
+                      }
                     />
 
                     <Typography variant="h6">
@@ -123,17 +126,6 @@ class Friends extends Component {
         )}
       </div>
     );
-  }
-}
-
-export function getImg(id, media) {
-  if (id && media) {
-    const foundMedia = media.find(m => m.id == id);
-    if (foundMedia) {
-      return foundMedia.source_url;
-    } else {
-      return "/img/default.jpg";
-    }
   }
 }
 
