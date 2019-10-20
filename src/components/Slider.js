@@ -10,6 +10,7 @@ import {
   CardActions
 } from "@material-ui/core";
 import { getSliderData } from "../store";
+import axios from "axios";
 
 const styles = theme => ({
   root: {
@@ -65,8 +66,33 @@ class SimpleSlider extends React.Component {
   state = {
     sliderData: [1, 2, 3]
   };
+
+  createSliderData(data) {
+    return data.map((item, index) => {
+      const imgUrl = item.better_featured_image
+        ? item.better_featured_image.source_url
+        : ``;
+      const slogan = (
+        <span
+          dangerouslySetInnerHTML={{
+            __html: item && item.content && item.content.rendered
+          }}
+        />
+      );
+      return {
+        imgUrl,
+        slogan
+      };
+    });
+  }
+
   componentDidMount = () => {
-    this.setState({ sliderData: getSliderData() });
+    axios
+      .get(`http://superkamos.cz/api/?rest_route=/wp/v2/sliders`)
+      .then(res => {
+        const sliderData = res.data;
+        this.setState({ sliderData: this.createSliderData(res.data) });
+      });
   };
 
   render() {
@@ -85,11 +111,12 @@ class SimpleSlider extends React.Component {
     return (
       <div className={classes.root}>
         <Slider {...settings}>
-          {sliderData.map(item => (
-            <div className={classes.slide}>
-              <CarouselItem classes={classes} item={item} />
-            </div>
-          ))}
+          {Array.isArray(sliderData) &&
+            sliderData.map(item => (
+              <div className={classes.slide}>
+                <CarouselItem classes={classes} item={item} />
+              </div>
+            ))}
         </Slider>
       </div>
     );
@@ -102,7 +129,9 @@ function CarouselItem({ item, classes }) {
     <React.Fragment>
       <span
         className={classes.slideImg}
-        style={{ backgroundImage: `url('${imgUrl}')` }}
+        style={{
+          backgroundImage: `url('${imgUrl}')`
+        }}
       >
         <Card className={classes.card}>
           {title && (
